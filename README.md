@@ -161,6 +161,25 @@ Did you mean?  session):
     6:     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
 ```
 
+Try restarting the server.
+
+I found [https://stackoverflow.com/questions/24420942/undefined-method-session-path](https://stackoverflow.com/questions/24420942/undefined-method-session-path)
+
+
+Ugh.
+
+```
+Started POST "/users/sign_in" for 127.0.0.1 at 2021-07-14 21:44:06 -0600
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"authenticity_token"=>"[FILTERED]", "user"=>{"email"=>"foo@bar.com", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Log in"}
+  User Load (0.2ms)  SELECT "users".* FROM "users" WHERE "users"."email" = ? ORDER BY "users"."id" ASC LIMIT ?  [["email", "foo@bar.com"], ["LIMIT", 1]]
+Completed 401 Unauthorized in 4ms (ActiveRecord: 0.2ms | Allocations: 1525)
+
+```
+
+I feel like I deviated from a good path. This is surprisingly difficult. 
+
+
 ## Generate Devise views
 
 Also from the instructions after installing devise:
