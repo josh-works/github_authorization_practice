@@ -1,24 +1,44 @@
-# README
+# Zero to MVP with Omniauth-Github
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+I want to have an app deployed on Heroku where one can log in via Github. 
 
-Things you may want to cover:
+It'll live live somewhere, as proof. 
 
-* Ruby version
+Working through [https://github.com/josh-works/devise_practice_02](https://github.com/josh-works/devise_practice_02), where I finally (for like the third time) found a good guide to setting up Devise and authentication via Github.
 
-* System dependencies
+# The Steps
 
-* Configuration
+I'm going to "narrarate" every step of this repositoiry, and the linked Heroku application.
 
-* Database creation
+## Rails new, and adding Git
 
-* Database initialization
+I have `rails 6.1.4` installed as my newest version:
 
-* How to run the test suite
+```
+$ rails new github_authorization_practice
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Wait for the terminal to finish `rails new-ing`, and:
 
-* Deployment instructions
+```
+cd github_authorization_practice
+hub create
+ga .
+gc -m "initial commit: rails new github_authorization_practice"
+```
 
-* ...
+And we're off!
+
+[https://github.com/josh-works/github_authorization_practice/commit/aa0f5c9](https://github.com/josh-works/github_authorization_practice/commit/aa0f5c9)
+
+## Add `devise` to Gemfile, run installer
+
+1. add `devise` to Gemfile
+2. run `rails g devise:install`
+
+Add all and commit:
+
+
+[https://github.com/josh-works/github_authorization_practice/commit/aa0f5c9](https://github.com/josh-works/github_authorization_practice/commit/aa0f5c9)
+
+
