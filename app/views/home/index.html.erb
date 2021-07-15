@@ -1,7 +1,10 @@
 <h1>I'm in index.html.erb</h1>
 
 <% if user_signed_in? %>
-	  <h1>User is LOGGED IN! :)</h1>
+  <h2>Welcome <%= current_user.email %></h2>
+	  <h1>You are logged in! :)</h1>
+    <%= link_to "log out", destroy_user_session_path %>
 <% else %>
-	  <h1>User is NOT logged in! :(</h1>
+	  <h1>No one is logged in! :(</h1>
+    <%= link_to "log in", new_user_session_path %>
 <% end %>
