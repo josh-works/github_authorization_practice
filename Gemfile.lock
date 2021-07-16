@@ -267,7 +267,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   listen (~> 3.3)
   omniauth-github
-  omniauth-rails_csrf_protection
+  omniauth-rails_csrf_protection (~> 1.0)
   pg
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
