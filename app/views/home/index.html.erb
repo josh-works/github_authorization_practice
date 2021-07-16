@@ -8,3 +8,12 @@
 	  <h1>No one is logged in! :(</h1>
     <%= link_to "log in", new_user_session_path %>
 <% end %>
+
+
+<% if current_user %>
+  <h3><%= current_user.name %></h3>
+  <h3><%= current_user.email %></h3>
+  <%= image_tag(current_user.image) unless current_user.image.nil? %>
+<% else %>
+  <h3>there is no current_user</h3>
+<% end %>
