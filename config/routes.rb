@@ -3,5 +3,5 @@ Rails.application.routes.draw do
   root to: "home#index"
   
   
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_for :users, skip: [:sessions], controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 end
