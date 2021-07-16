@@ -274,7 +274,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   github_app_id = Rails.application.credentials.github[:client_id]
   github_app_secret = Rails.application.credentials.github[:client_secret]
-  config.omniauth :github, github_app_id, github_app_secret, scope: 'read:user'
+  # config.omniauth :github, github_app_id, github_app_secret, scope: 'read:user'
   
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
