@@ -1,0 +1,10 @@
+<div class="all_entries">
+  <h3>All Your Brag Entries!</h3>
+  <ul>
+  <% @all_entries.each do |entry| %>
+      <li><%= entry.body %></li>
+  <% end %>
+  </ul>
+</div>
+
+<%= link_to "Create new entry", new_brag_entry_path %>
