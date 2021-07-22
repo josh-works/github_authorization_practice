@@ -1,4 +1,15 @@
 <div class="new_brag_entry">
   <h3>create a new brag entry</h3>
-  
+  <%= form_with model: @brag_entry, 
+      url: new_brag_entry_path, 
+      method: :post, 
+      local: true, 
+      scope: brag_entry do |f| %>
+  <div>
+    <%= f.label :body %><br>
+    <%= f.text_field :body %>
+    <%= f.submit "Add Brag Entry" %>
+  </div>
+    
+  <% end %>
 </div>
