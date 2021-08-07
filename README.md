@@ -173,7 +173,9 @@ Add this line here -> <%= stylesheet_pack_tag 'application', media: 'all', 'data
 
 ```
 
-Now bring up the docs on tailwind and for each html tag add a class where you can write in your css without having to write your css into another file
+Click the link below to bring up the docs on tailwind. For each html tag add a class where you can write in your css without having to write your css into another file. Click the search bar and type in what styling type you are looking for and it will show you usage examples to do so.
+
+[https://tailwindcss.com/docs]
 
 ## Show "login" or "logout" if current user is signed in
 
