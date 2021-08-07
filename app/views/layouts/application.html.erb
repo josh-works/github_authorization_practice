@@ -13,22 +13,8 @@
 
   <body>
     <%= render "layouts/header" %>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <% if current_user %>
-      <h5><%= current_user.name %></h5>
-      <p><%= current_user.email %></p>
-      <% unless current_user.image.nil? %>
-        <%= image_tag(current_user.image, size: '60x60')  %>
-      <% end %>
-    <% else %>
-      <h5>there is no current_user</h5>
-    <% end %>
+    <%= render "layouts/alerts" %>
     <%= yield %>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
     <%= render "layouts/footer" %>
   </body>
 </html>
