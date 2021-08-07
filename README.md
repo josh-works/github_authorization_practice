@@ -1,8 +1,8 @@
 # Zero to MVP with Omniauth-Github
 
-I want to have an app deployed on Heroku where one can log in via Github. 
+I want to have an app deployed on Heroku where one can log in via Github.
 
-It'll live live somewhere, as proof. 
+It'll live live somewhere, as proof.
 
 Working through [https://github.com/josh-works/devise_practice_02](https://github.com/josh-works/devise_practice_02), where I finally (for like the third time) found a good guide to setting up Devise and authentication via Github.
 
@@ -54,7 +54,6 @@ Update `routes.rb` to use a root URL:
 
 [https://github.com/josh-works/github_authorization_practice/commit/42085dc](https://github.com/josh-works/github_authorization_practice/commit/42085dc)
 
-
 If you reload your page, you'll get an `Uninitialized Constant: HomeController`
 
 ## Create Home#index
@@ -67,6 +66,7 @@ class HomeController < ApplicationController
 end
 
 ```
+
 [https://github.com/josh-works/github_authorization_practice/commit/990babc](https://github.com/josh-works/github_authorization_practice/commit/990babc)
 
 Reload the page, now complains about the view
@@ -77,7 +77,103 @@ Reload the page, now complains about the view
 # app/views/home/index.html.erb
 <h1>I'm in index.html.erb</h1>
 ```
+
 [https://github.com/josh-works/github_authorization_practice/commit/9bf1a56](https://github.com/josh-works/github_authorization_practice/commit/9bf1a56)
+
+## Add Tailwindcss to the project for easy styling
+
+Create a new rails project and go to the project in the command line
+
+```
+ rails new myproject
+ cd myproject
+```
+
+Use yarn to add the dependencies. Rails typically uses yarn, so I did here as well even though I usually use npm otherwise
+
+There is an issue with postcss compatibility on the newest version. We specify version 7 here. Once version 8 is fixed we can upgrade this
+
+```
+yarn add tailwindcss@npm:@tailwindcss/postcss7-compat @tailwindcss/postcss7-compat postcss@\^7 autoprefixer@\^9
+```
+
+This command creates the base `tailwind.config.js` at the root of your project. I have moved it into a folder under javascript for organization
+
+```
+npx tailwindcss init
+```
+
+This stylesheet brings in all of our styles via tailwind. You can research how to add in your own custom styles.
+
+```scss
+# app/javascript/stylesheets/application.scss
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+// add custom styles here
+
+@import "tailwindcss/utilities";
+```
+
+We add this line to the top of the file in the packs so that webpacker can compile our styles
+
+```
+# app/javascript/packs/application.js
+
+import "stylesheets/application"
+```
+
+Replace the purge object with the below code
+Purge: this specifies what classes we do not need and removes them
+
+```javascript
+# ./tailwind.config.js
+
+module.exports = {
+  purge: [
+    "./app/**/*.html.erb",
+    "./app/helpers/**/*.rb",
+    "./app/javascript/**/*.js",
+  ],
+
+};
+```
+
+Plugins: We require our tailwind config file into the postcss config to bring in our additional configurations
+
+```javascript
+# ./postcss.config.js
+
+module.exports = {
+  plugins: [
+    require("tailwindcss")("./app/javascript/stylesheets/tailwind.config.js"),
+    require("postcss-import"),
+    require("postcss-flexbugs-fixes"),
+    require("postcss-preset-env")({
+      autoprefixer: {
+        flexbox: "no-2009",
+      },
+      stage: 3,
+    }),
+  ],
+};
+```
+
+We need this javascript pack tag as it is the one that is injecting stylesheets
+
+```erb
+# ./application.html.erb
+
+// <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+Add this line here -> <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+// <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+```
+
+Now bring up the docs on tailwind and for each html tag add a class where you can write in your css without having to write your css into another file
 
 ## Show "login" or "logout" if current user is signed in
 
@@ -88,9 +184,9 @@ In the view, add logic around the current_user:
 <h1>I'm in index.html.erb</h1>
 
 <% if user_signed_in? %>
-	  <h1>User is LOGGED IN! :)</h1>
+<h1>User is LOGGED IN! :)</h1>
 <% else %>
-	  <h1>User is NOT logged in! :(</h1>
+<h1>User is NOT logged in! :(</h1>
 <% end %>
 ```
 
@@ -169,7 +265,7 @@ I messed around for a bit, trying to make it work. Reloaded the page, restarted 
 
 http://localhost:3000/ shows "not logged in", if I click "log in", I can create a user, and once I've created a user, I get logged in, or I can clear my cookies (poor man's logging out).
 
-For clearing cookies, I use the `edit this cookie` extension (I've got it in Chrome and Firefox): [https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg). 
+For clearing cookies, I use the `edit this cookie` extension (I've got it in Chrome and Firefox): [https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg).
 
 I'd like to make "log out" work, right now I'm getting the following, when clicking log out:
 
@@ -178,12 +274,11 @@ Routing Error
 No route matches [GET] "/users/sign_out"
 ```
 
-The `link_to` rails helper defaults to a `GET` whenever you use it. 
+The `link_to` rails helper defaults to a `GET` whenever you use it.
 
 I ran `b rails routes`, because I knew Devise has a `destroy session` option somewhere... Lets see what routes are available:
 
 ![aha! I'm getting close](./readme_images/2021-07-15-at-11.43-AM.jpg)
-
 
 So, we'll update the view:
 
@@ -207,8 +302,7 @@ Here's the commit that fixes all the _current_ functionality of Devise on our li
 
 [https://github.com/josh-works/github_authorization_practice/commit/13a7e34](https://github.com/josh-works/github_authorization_practice/commit/13a7e34)
 
-
-----------------
+---
 
 ## Push to Heroku, make sure the login/logout stuff works
 
@@ -232,6 +326,7 @@ remote:        --add-platform x86_64-linux` and try again.
 ```
 
 In the terminal:
+
 ```
 bundle lock --add-platform x86_64-linux
 ```
@@ -264,21 +359,20 @@ remote:  !
 Heroku sends you to [https://devcenter.heroku.com/articles/sqlite3](https://devcenter.heroku.com/articles/sqlite3) to read more. Quoting:
 
 > Ruby on Rails and some other web based frameworks ship with support for a small database called sqlite3 by default. SQLite is ideal for users getting started since it can be run in memory and backed by small files on disk that are easily created and moved around. While easy to use, SQLite is not intended as a production grade database. Instead Heroku provides production grade PostgreSQL databases as a service.
-> 
+>
 > Why is SQLite a bad fit for running on Heroku?
-> 
+>
 > ### Disk backed storage
-> 
+>
 > SQLite runs in memory, and backs up its data store in files on disk. While this strategy works well for development, Heroku’s Cedar stack has an ephemeral filesystem. You can write to it, and you can read from it, but the contents will be cleared periodically. If you were to use SQLite on Heroku, you would lose your entire database at least once every 24 hours.
-> 
+>
 > Even if Heroku’s disks were persistent running SQLite would still not be a good fit. Since SQLite does not run as a service, each dyno would run a separate running copy. Each of these copies need their own disk backed store. This would mean that each dyno powering your app would have a different set of data since the disks are not synchronized.
-> 
+>
 > Instead of using SQLite on Heroku you can configure your app to run on Postgres.
 
 Let's get this app running on Postgres!
 
-
-I already have Postgres installed on my machine, no biggie. If you don't, you'll need to install it. 
+I already have Postgres installed on my machine, no biggie. If you don't, you'll need to install it.
 
 From the docs, a short checklist:
 
@@ -326,9 +420,9 @@ to this:
 
 `adapter: postgresql`
 
-Note the adapter name is `postgresql` not `postgres` or `pg`. 
+Note the adapter name is `postgresql` not `postgres` or `pg`.
 
-You will also need to change the database to a custom name. 
+You will also need to change the database to a custom name.
 
 A final version might look something like:
 
@@ -350,6 +444,7 @@ production:
   pool: 5
   timeout: 5000
 ```
+
 ### 4. Create your database and run any pre existing migrations against it:
 
 ```
@@ -375,19 +470,18 @@ $ rails db:migrate
    -> 0.0027s
 == 20210715031134 DeviseCreateUsers: migrated (0.0167s) =======================
 ```
+
 ### 5. `git add .` and `git commit -m "convert to postgres"`
 
 I did:
 
 ```shell
 $ ga Gemfile Gemfile.lock config/database.yml db/schema.rb
-``` 
+```
 
 [https://github.com/josh-works/github_authorization_practice/commit/3781310](https://github.com/josh-works/github_authorization_practice/commit/3781310)
 
-
 ## Re-push to heroku, try logging into heroku, see that it's broken, tail heroku logs, not see obvious problem, realize app is broken locally too
-
 
 ```
 $ git push heroku master
@@ -411,7 +505,6 @@ _update, it wasn't broken, it's that I was trying to log into a user I'd never c
 
 I'm just leaving all this here so you can see my debugging process...
 
-
 ## Realize you just need to create a new user, because the user I'd created existed in SQLite memory, and I just got rid of all that
 
 _create the user locally, create the user on Heroku..._
@@ -422,8 +515,7 @@ _create the user locally, create the user on Heroku..._
 
 _googles `run migrations heroku rails`_
 
-Looks like if I prepend any `rails` or `rake` command with `heroku run`, it'll "shell out" to my heroku instance. I bet I can give it environment flags to log into production vs. development, etc. 
-
+Looks like if I prepend any `rails` or `rake` command with `heroku run`, it'll "shell out" to my heroku instance. I bet I can give it environment flags to log into production vs. development, etc.
 
 ```
 $ heroku run rails db:migrate
@@ -459,7 +551,7 @@ Phew. We're live! Let's add Github authorization!
 
 ## First get necessary information from Github
 
-You may or may not have already created an app. 
+You may or may not have already created an app.
 
 You'll need an `app_id`, and a `client_secret`:
 
@@ -481,9 +573,9 @@ Down on line 274, you're going to write something _similar_ to the provided exam
 config.omniauth :github, github_app_id, github_app_secret, scope: 'user'
 ```
 
-The attentive among you might say 
+The attentive among you might say
 
-> wait, we just referenced two variables that don't actually exist, this won't work. 
+> wait, we just referenced two variables that don't actually exist, this won't work.
 >
 > When I boot the server this will throw an error!
 
@@ -497,13 +589,13 @@ github_app_secret = Rails.application.credentials.github[:client_secret]
 config.omniauth :github, github_app_id, github_app_secret, scope: 'user'
 ```
 
-While you're at it, open up [ https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps]( https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps), and give it a skim.
+While you're at it, open up [ https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps), and give it a skim.
 
 You'll want to have an idea for how GitHub deals with scopes.
 
-Anyway, we're getting there. Now when we boot the app, we get a `nilClass` error, because these credentials don't work. 
+Anyway, we're getting there. Now when we boot the app, we get a `nilClass` error, because these credentials don't work.
 
-We've not made these available to our app. Sure, we could hard-code the values, but that's not anything we should ever commit to a public repository. 
+We've not made these available to our app. Sure, we could hard-code the values, but that's not anything we should ever commit to a public repository.
 
 ## Open your "secrets" encrypted file
 
@@ -519,7 +611,7 @@ You'd think this would leave the tab open for you to edit it, but [you'd be wron
 EDITOR="atom --wait" rails credentials:edit
 ```
 
-Or if you use `code`, `subl`, `vim`, etc, swap those out for `atom`. 
+Or if you use `code`, `subl`, `vim`, etc, swap those out for `atom`.
 
 ## Add github-related credentials
 
@@ -537,8 +629,8 @@ github:
   client_id: cd3.......123
   client_secret: 7c................................bf
 ```
-and close the credentials file.
 
+and close the credentials file.
 
 [https://github.com/josh-works/github_authorization_practice/commit/2283359](https://github.com/josh-works/github_authorization_practice/commit/2283359)
 
@@ -579,7 +671,7 @@ def self.from_omniauth(auth)
    user.password = Devise.friendly_token[0, 20]
    user.name = auth.info.name   # assuming the user model has a name
    user.image = auth.info.image # assuming the user model has an image
-   # If you are using confirmable and the provider(s) you use validate emails, 
+   # If you are using confirmable and the provider(s) you use validate emails,
    # uncomment the line below to skip the confirmation emails.
    # user.skip_confirmation!
  end
@@ -630,8 +722,8 @@ My scopes are still a bit too much:
 
 I'm inadvertently getting access to way more repositories than I want to give my app access to. This is something that the organizations can and should fix:
 
- https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
- 
+https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
+
 ## Update scope in Devise installer
 
 In the devise initializer, update the github scope request to:
@@ -666,12 +758,11 @@ uninitialized constant OmniauthCallbacksController
 
 Ah, I mis-named the file I created. Fixed this here:
 
-
 [https://github.com/josh-works/github_authorization_practice/commit/23244a9](https://github.com/josh-works/github_authorization_practice/commit/23244a9)
 
 ## Fix missing name/params
 
-In the user model, we're trying to save attributes like `name`, `image`, maybe `nickname`. 
+In the user model, we're trying to save attributes like `name`, `image`, maybe `nickname`.
 
 We don't have these attributes in our database, so lets make them:
 
@@ -691,15 +782,11 @@ Here:
 
 [https://github.com/josh-works/github_authorization_practice/commit/1f63ec0](https://github.com/josh-works/github_authorization_practice/commit/1f63ec0)
 
-
 ## Update user model for info that comes from Github
 
 [https://github.com/josh-works/github_authorization_practice/commit/13ebef1](https://github.com/josh-works/github_authorization_practice/commit/13ebef1)
 
-
-
-
--------------------
+---
 
 ## Generate Devise views
 
@@ -708,7 +795,7 @@ Also from the instructions after installing devise:
 ```
 rails g devise:views
 ```
---------- 
+
+---
 
 localhost:3000/users/sign_up
-
