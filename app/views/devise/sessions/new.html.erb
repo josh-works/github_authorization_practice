@@ -1,28 +1,58 @@
-<h2>Log in to this demo app</h2>
+<div class="flex flex-row max-w-full grid-rows-1">
+  <div class="flex w-3/4 justify-around">
+    <div class="flex w-3/4 max-h-full justify-around ">
+      <div class="p-6">
+        <div class="bg-indigo-50 rounded-xl shadow-sm">
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "m-6") do |f| %>
+            <div class="field pt-6 pl-6 pr-6 ">
+              <div class= "pb-2">
+                <%= f.label :email %>
+              </div>
+              <div class="">
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "rounded border-2 border-blue-200" %>
+              </div>
+            </div>
 
-This particular view is in <pre>app/views/devise/sessions/new.html.erb</pre>, which you auto-generate when you run <pre>rails g devise views User</pre>
+            <div class="field mt-4 ml-6">
+              <div  class= "pb-2">
+                <%= f.label :password %>
+              </div>
+              <div>
+                <%= f.password_field :password, autocomplete: "current-password", class: "rounded border-2 border-blue-200" %>
+              </div>
+            </div>
+            <div class="mt-4 ml-6">
+              <% if devise_mapping.rememberable? %>
+                <div class="field">
+                  <%= f.check_box :remember_me %>
+                  <%= f.label :remember_me %>
+                </div>
+              <% end %>
+            </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+            <div class="actions mt-4 ml-6 pb-6 ">
+              <%= f.submit "Log in", class: "bg-white p-2 pl-4 pr-4 rounded-xl shadow hover:shadow-lg cursor-pointer" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="mt-10">
+          <div class="ml-6">
+            <p class="mt-2">Log in to this demo app</p>
+            <p class="mt-2">This particular view is in </p>
+            <p class="mt-2">app/views/devise/sessions/new.html.erb</p>
+            <p class="mt-2">, which you auto-generate when you run </p>
+            <p class="mt-2">rails g devise views User</p>    
+          </div>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
+  <div class="flex w-3/4 justify-around">
+    <div class="flex w-3/4 max-h-full justify-around">
+      <%= render "devise/shared/links" %>  
+    </div>
+  </div>
+</div>
 
-<%= render "devise/shared/links" %>
+
+
