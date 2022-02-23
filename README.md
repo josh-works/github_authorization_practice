@@ -801,3 +801,29 @@ rails g devise:views
 ---
 
 localhost:3000/users/sign_up
+
+I was getting this error:
+
+```
+No route matches [GET] "/users/omniauth_callbacks"
+```
+
+Updated the github application to use a better callback URL path, which I got from `rake routes -g devise`
+
+OK, I had to redo the `encrypted.yml` file, with:
+
+```
+EDITOR='atom --wait' rails credentials:edit
+```
+
+then re-push, and then update the heroku app  environment variables, I think both environment variables somewhere in the Heroku GUI. 
+
+https://dashboard.heroku.com/apps/YOURAPP/settings => config vars => `RAILS_MASTER_KEY` and `SECRET_KEY_BASE`. Fill these out with the variables from your app, and you _might_ be good to go.
+
+Either way, I got logged in:
+
+![its alive](/images/its-live.jpg)
+
+And it works on Heroku, buuuut only for me, not for Arique. So I'm going to start this again, from scratch, and figure this shit out, for real this time.
+
+Here's the heroku app that works for me right now: https://whispering-brushlands-16117.herokuapp.com/
